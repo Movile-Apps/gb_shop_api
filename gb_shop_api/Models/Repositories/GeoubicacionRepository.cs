@@ -77,10 +77,10 @@ namespace gb_shop_api.Models.Repositories
             {
                 using (gb_shopContext db = new gb_shopContext())
                 {
-                    Geoubicacion oPro = new Geoubicacion();
-                    oPro.IdGeoubicacion = model.IdGeoubicacion;
+                    Geoubicacion oPro = db.Geoubicacions.Find(model.IdGeoubicacion);
                     oPro.Latitud = model.Latitud;
                     oPro.Longitud = model.Longitud;
+
                     db.Entry(oPro).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     db.SaveChanges();
                     oRespuesta.Exito = 1;

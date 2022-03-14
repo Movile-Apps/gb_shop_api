@@ -227,8 +227,8 @@ namespace gb_shop_api.Models.Repositories
                 {
                     foto.Edit(model.FotoRequest);
                     geoubicacion.Edit(model.GeoubicacionRequest);
-                    EventoLimpieza oPro = new EventoLimpieza();
-                    oPro.IdEvento = model.IdEvento;
+
+                    EventoLimpieza oPro = db.EventoLimpiezas.Find(model.IdEvento);
                     oPro.IdPatrocinador = model.IdPatrocinador;
                     oPro.IdFoto = model.IdFoto;
                     oPro.IdGeoubicacion = model.IdGeoubicacion;
@@ -236,6 +236,7 @@ namespace gb_shop_api.Models.Repositories
                     oPro.Descripcion = model.Descripcion;
                     oPro.PersonasRequeridas = model.PersonasRequeridas;
                     oPro.Asistencias = model.Asistencias;
+
                     db.Entry(oPro).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     db.SaveChanges();
                     oRespuesta.Exito = 1;

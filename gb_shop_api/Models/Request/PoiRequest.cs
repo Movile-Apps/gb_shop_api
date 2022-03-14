@@ -11,5 +11,6 @@ namespace gb_shop_api.Models.Request
         public int? IdReporte { get; set; }
         public int? Confirmaciones { get; set; }
         public int? Negaciones { get; set; }
+        public ReporteRequest ReporteRequest { get; set; }
     }
 }

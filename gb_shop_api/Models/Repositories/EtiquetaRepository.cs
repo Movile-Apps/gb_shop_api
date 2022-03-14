@@ -103,11 +103,12 @@ namespace gb_shop_api.Models.Repositories
                 using (gb_shopContext db = new gb_shopContext())
                 {
                     foto.Edit(model.FotoRequest);
-                    Etiqueta oPro = new Etiqueta();
-                    oPro.IdEtiqueta = model.IdEtiqueta;
+
+                    Etiqueta oPro = db.Etiqueta.Find(model.IdEtiqueta);
                     oPro.IdFoto = model.IdFoto;
                     oPro.Nombre = model.Nombre;
                     oPro.Descripcion = model.Descripcion;
+
                     db.Entry(oPro).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     db.SaveChanges();
                     oRespuesta.Exito = 1;
@@ -129,8 +130,10 @@ namespace gb_shop_api.Models.Repositories
                 {
                     var idfoto = Convert.ToInt32(GetById(id).Data.IdFoto);
                     Etiqueta oPro = db.Etiqueta.Find(id);
+
                     db.Remove(oPro);
                     db.SaveChanges();
+
                     foto.Delete(idfoto);
                     oRespuesta.Exito = 1;
                 }

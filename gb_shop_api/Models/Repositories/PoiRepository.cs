@@ -12,14 +12,30 @@ namespace gb_shop_api.Models.Repositories
 {
     public class PoiRepository
     {
-        public Respuesta<List<Poi>> Get()
+        public Respuesta<List<PoiRequest>> Get()
         {
-            Respuesta<List<Poi>> oRespuesta = new Respuesta<List<Poi>>();
+            Respuesta<List<PoiRequest>> oRespuesta = new Respuesta<List<PoiRequest>>();
             try
             {
                 using (gb_shopContext db = new gb_shopContext())
                 {
-                    var list = db.Pois.ToList();
+                    var list = db.Pois.Join(db.Reportes, Poi => Poi.IdReporte, Reporte => Reporte.IdFoto, (Poi, Reporte) => new PoiRequest
+                    {
+                        IdPoi = Poi.IdPoi,
+                        IdReporte = Poi.IdReporte,
+                        Confirmaciones = Poi.Confirmaciones,
+                        Negaciones = Poi.Negaciones,
+                        ReporteRequest = new ReporteRequest
+                        {
+                            IdReporte = Reporte.IdReporte,
+                            IdUsuario = Reporte.IdUsuario,
+                            IdEtiqueta = Reporte.IdEtiqueta,
+                            IdFoto = Reporte.IdFoto,
+                            IdGeoubicacion = Reporte.IdGeoubicacion,
+                            Fecha = Reporte.Fecha,
+                            Descripcion = Reporte.Descripcion,
+                        }
+                    }).ToList();
                     oRespuesta.Exito = 1;
                     oRespuesta.Data = list;
                 }
@@ -30,14 +46,30 @@ namespace gb_shop_api.Models.Repositories
             }
             return oRespuesta;
         }
-        public Respuesta<Poi> GetById(int id)
+        public Respuesta<PoiRequest> GetById(int id)
         {
-            Respuesta<Poi> oRespuesta = new Respuesta<Poi>();
+            Respuesta<PoiRequest> oRespuesta = new Respuesta<PoiRequest>();
             try
             {
                 using (gb_shopContext db = new gb_shopContext())
                 {
-                    var list = db.Pois.Find(id);
+                    var list = db.Pois.Join(db.Reportes, Poi => Poi.IdReporte, Reporte => Reporte.IdFoto, (Poi, Reporte) => new PoiRequest
+                    {
+                        IdPoi = Poi.IdPoi,
+                        IdReporte = Poi.IdReporte,
+                        Confirmaciones = Poi.Confirmaciones,
+                        Negaciones = Poi.Negaciones,
+                        ReporteRequest = new ReporteRequest
+                        {
+                            IdReporte = Reporte.IdReporte,
+                            IdUsuario = Reporte.IdUsuario,
+                            IdEtiqueta = Reporte.IdEtiqueta,
+                            IdFoto = Reporte.IdFoto,
+                            IdGeoubicacion = Reporte.IdGeoubicacion,
+                            Fecha = Reporte.Fecha,
+                            Descripcion = Reporte.Descripcion,
+                        }
+                    }).FirstOrDefault(x => x.IdPoi == id);
                     oRespuesta.Exito = 1;
                     oRespuesta.Data = list;
                 }
@@ -78,11 +110,11 @@ namespace gb_shop_api.Models.Repositories
             {
                 using (gb_shopContext db = new gb_shopContext())
                 {
-                    Poi oPro = new Poi();
-                    oPro.IdPoi = model.IdPoi;
+                    Poi oPro = db.Pois.Find(model.IdPoi);
                     oPro.IdReporte = model.IdReporte;
                     oPro.Confirmaciones = model.Confirmaciones;
                     oPro.Negaciones = model.Negaciones;
+
                     db.Entry(oPro).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     db.SaveChanges();
                     oRespuesta.Exito = 1;

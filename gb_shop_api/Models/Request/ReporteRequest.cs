@@ -14,11 +14,9 @@ namespace gb_shop_api.Models.Request
         public int? IdGeoubicacion { get; set; }
         public DateTime? Fecha { get; set; }
         public string Descripcion { get; set; }
-        public string Usuario { get; set; }
-        public string Etiqueta { get; set; }
-        public double? Latitud { get; set; }
-        public double? Longitud { get; set; }
-        public string Nombre_Foto { get; set; }
-        public string Url_Foto { get; set; }
+        public UsuarioRequest UsuarioRequest { get; set; }
+        public EtiquetaRequest EtiquetaRequest { get; set; }
+        public FotoRequest FotoRequest { get; set; }
+        public GeoubicacionRequest GeoubicacionRequest { get; set; }
     }
 }

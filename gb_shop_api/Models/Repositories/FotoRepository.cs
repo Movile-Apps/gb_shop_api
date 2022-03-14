@@ -77,10 +77,10 @@ namespace gb_shop_api.Models.Repositories
             {
                 using (gb_shopContext db = new gb_shopContext())
                 {
-                    Foto oPro = new Foto();
-                    oPro.IdFoto = model.IdFoto;
+                    Foto oPro = db.Fotos.Find(model.IdFoto);
                     oPro.Nombre = model.Nombre;
                     oPro.Url = model.Url;
+
                     db.Entry(oPro).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     db.SaveChanges();
                     oRespuesta.Exito = 1;

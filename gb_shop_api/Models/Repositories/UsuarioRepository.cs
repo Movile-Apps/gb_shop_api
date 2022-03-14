@@ -109,13 +109,14 @@ namespace gb_shop_api.Models.Repositories
                 using (gb_shopContext db = new gb_shopContext())
                 {
                     foto.Edit(model.FotoRequest);
-                    Usuario oPro = new Usuario();
-                    oPro.IdUsuario = model.IdUsuario;
+
+                    Usuario oPro = db.Usuarios.Find(model.IdUsuario);
                     oPro.IdFoto = model.IdFoto;
                     oPro.Nombre = model.Nombre;
                     oPro.Apellido = model.Apellido;
                     oPro.Correo = model.Correo;
                     oPro.Contraseña = model.Contraseña;
+
                     db.Entry(oPro).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     db.SaveChanges();
                     oRespuesta.Exito = 1;
@@ -137,8 +138,10 @@ namespace gb_shop_api.Models.Repositories
                 {
                     var idfoto = Convert.ToInt32(GetById(id).Data.IdFoto);
                     Usuario oPro = db.Usuarios.Find(id);
+
                     db.Remove(oPro);
                     db.SaveChanges();
+
                     foto.Delete(idfoto);
                     oRespuesta.Exito = 1;
                 }
