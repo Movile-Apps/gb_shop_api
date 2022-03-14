@@ -12,14 +12,27 @@ namespace gb_shop_api.Models.Repositories
 {
     public class EtiquetaRepository
     {
-        public Respuesta<List<Etiqueta>> Get()
+        FotoRepository foto = new FotoRepository();
+
+        public Respuesta<List<EtiquetaRequest>> Get()
         {
-            Respuesta<List<Etiqueta>> oRespuesta = new Respuesta<List<Etiqueta>>();
+            Respuesta<List<EtiquetaRequest>> oRespuesta = new Respuesta<List<EtiquetaRequest>>();
             try
             {
                 using (gb_shopContext db = new gb_shopContext())
                 {
-                    var list = db.Etiqueta.ToList();
+                    var list = db.Etiqueta.Join(db.Fotos, Etiqueta => Etiqueta.IdFoto, Foto => Foto.IdFoto, (Etiqueta, Foto) => new EtiquetaRequest
+                    {
+                        IdEtiqueta = Etiqueta.IdEtiqueta,
+                        IdFoto = Etiqueta.IdFoto,
+                        Nombre = Etiqueta.Nombre,
+                        Descripcion = Etiqueta.Descripcion,
+                        FotoRequest = new FotoRequest{
+                            IdFoto = Foto.IdFoto,
+                            Nombre = Foto.Nombre,
+                            Url = Foto.Url,
+                        }
+                    }).ToList();
                     oRespuesta.Exito = 1;
                     oRespuesta.Data = list;
                 }
@@ -30,14 +43,25 @@ namespace gb_shop_api.Models.Repositories
             }
             return oRespuesta;
         }
-        public Respuesta<Etiqueta> GetById(int id)
+        public Respuesta<EtiquetaRequest> GetById(int id)
         {
-            Respuesta<Etiqueta> oRespuesta = new Respuesta<Etiqueta>();
+            Respuesta<EtiquetaRequest> oRespuesta = new Respuesta<EtiquetaRequest>();
             try
             {
                 using (gb_shopContext db = new gb_shopContext())
                 {
-                    var list = db.Etiqueta.Find(id);
+                    var list = db.Etiqueta.Join(db.Fotos, Etiqueta => Etiqueta.IdFoto, Foto => Foto.IdFoto, (Etiqueta, Foto) => new EtiquetaRequest
+                    {
+                        IdEtiqueta = Etiqueta.IdEtiqueta,
+                        IdFoto = Etiqueta.IdFoto,
+                        Nombre = Etiqueta.Nombre,
+                        Descripcion = Etiqueta.Descripcion,
+                        FotoRequest = new FotoRequest{
+                            IdFoto = Foto.IdFoto,
+                            Nombre = Foto.Nombre,
+                            Url = Foto.Url,
+                        }
+                    }).FirstOrDefault(x => x.IdEtiqueta == id);
                     oRespuesta.Exito = 1;
                     oRespuesta.Data = list;
                 }
@@ -53,7 +77,6 @@ namespace gb_shop_api.Models.Repositories
             Respuesta<object> oRespuesta = new Respuesta<object>();
             try
             {
-                FotoRepository foto = new FotoRepository();
                 using (gb_shopContext db = new gb_shopContext())
                 {
                     Etiqueta oPro = new Etiqueta();
@@ -79,6 +102,7 @@ namespace gb_shop_api.Models.Repositories
             {
                 using (gb_shopContext db = new gb_shopContext())
                 {
+                    foto.Edit(model.FotoRequest);
                     Etiqueta oPro = new Etiqueta();
                     oPro.IdEtiqueta = model.IdEtiqueta;
                     oPro.IdFoto = model.IdFoto;
@@ -103,9 +127,11 @@ namespace gb_shop_api.Models.Repositories
             {
                 using (gb_shopContext db = new gb_shopContext())
                 {
+                    var idfoto = Convert.ToInt32(GetById(id).Data.IdFoto);
                     Etiqueta oPro = db.Etiqueta.Find(id);
                     db.Remove(oPro);
                     db.SaveChanges();
+                    foto.Delete(idfoto);
                     oRespuesta.Exito = 1;
                 }
             }

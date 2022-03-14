@@ -12,14 +12,29 @@ namespace gb_shop_api.Models.Repositories
 {
     public class UsuarioRepository
     {
-        public Respuesta<List<Usuario>> Get()
+        FotoRepository foto = new FotoRepository();
+
+        public Respuesta<List<UsuarioRequest>> Get()
         {
-            Respuesta<List<Usuario>> oRespuesta = new Respuesta<List<Usuario>>();
+            Respuesta<List<UsuarioRequest>> oRespuesta = new Respuesta<List<UsuarioRequest>>();
             try
             {
                 using (gb_shopContext db = new gb_shopContext())
                 {
-                    var list = db.Usuarios.ToList();
+                    var list = db.Usuarios.Join(db.Fotos, Usuario => Usuario.IdFoto, Foto => Foto.IdFoto, (Usuario, Foto) => new UsuarioRequest
+                    {
+                        IdUsuario = Usuario.IdUsuario,
+                        IdFoto = Usuario.IdFoto,
+                        Nombre = Usuario.Nombre,
+                        Apellido = Usuario.Apellido,
+                        Correo = Usuario.Correo,
+                        Contraseña = Usuario.Contraseña,
+                        FotoRequest = new FotoRequest{
+                            IdFoto = Foto.IdFoto,
+                            Nombre = Foto.Nombre,
+                            Url = Foto.Url,
+                        }
+                    }).ToList();
                     oRespuesta.Exito = 1;
                     oRespuesta.Data = list;
                 }
@@ -30,14 +45,27 @@ namespace gb_shop_api.Models.Repositories
             }
             return oRespuesta;
         }
-        public Respuesta<Usuario> GetById(int id)
+        public Respuesta<UsuarioRequest> GetById(int id)
         {
-            Respuesta<Usuario> oRespuesta = new Respuesta<Usuario>();
+            Respuesta<UsuarioRequest> oRespuesta = new Respuesta<UsuarioRequest>();
             try
             {
                 using (gb_shopContext db = new gb_shopContext())
                 {
-                    var list = db.Usuarios.Find(id);
+                    var list = db.Usuarios.Join(db.Fotos, Usuario => Usuario.IdFoto, Foto => Foto.IdFoto, (Usuario, Foto) => new UsuarioRequest
+                    {
+                        IdUsuario = Usuario.IdUsuario,
+                        IdFoto = Usuario.IdFoto,
+                        Nombre = Usuario.Nombre,
+                        Apellido = Usuario.Apellido,
+                        Correo = Usuario.Correo,
+                        Contraseña = Usuario.Contraseña,
+                        FotoRequest = new FotoRequest{
+                            IdFoto = Foto.IdFoto,
+                            Nombre = Foto.Nombre,
+                            Url = Foto.Url,
+                        }
+                    }).FirstOrDefault(x => x.IdUsuario == id);
                     oRespuesta.Exito = 1;
                     oRespuesta.Data = list;
                 }
@@ -53,7 +81,6 @@ namespace gb_shop_api.Models.Repositories
             Respuesta<object> oRespuesta = new Respuesta<object>();
             try
             {
-                FotoRepository foto = new FotoRepository();
                 using (gb_shopContext db = new gb_shopContext())
                 {
                     Usuario oPro = new Usuario();
@@ -81,6 +108,7 @@ namespace gb_shop_api.Models.Repositories
             {
                 using (gb_shopContext db = new gb_shopContext())
                 {
+                    foto.Edit(model.FotoRequest);
                     Usuario oPro = new Usuario();
                     oPro.IdUsuario = model.IdUsuario;
                     oPro.IdFoto = model.IdFoto;
@@ -107,9 +135,11 @@ namespace gb_shop_api.Models.Repositories
             {
                 using (gb_shopContext db = new gb_shopContext())
                 {
+                    var idfoto = Convert.ToInt32(GetById(id).Data.IdFoto);
                     Usuario oPro = db.Usuarios.Find(id);
                     db.Remove(oPro);
                     db.SaveChanges();
+                    foto.Delete(idfoto);
                     oRespuesta.Exito = 1;
                 }
             }

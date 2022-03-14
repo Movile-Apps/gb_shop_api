@@ -55,5 +55,21 @@ namespace gb_shop_api.Controllers
             return Ok(response);
         }
     }
+/*
+usalo para probar las funciones de Add y Edit:
+{
+    "idUsuario": 2,
+    "idFoto": 3,
+    "nombre": "Luis",
+    "apellidos": "Pool",
+    "correo": "luis@outlook.es",
+    "contraseña": "0987654321",
+    "fotoRequest": {
+        "idFoto": 3,
+        "nombre": "hola",
+        "url": "hola.jpg"
+    }
+}
+*/
 }
 

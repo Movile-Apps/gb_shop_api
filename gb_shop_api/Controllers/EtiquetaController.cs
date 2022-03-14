@@ -55,4 +55,18 @@ namespace gb_shop_api.Controllers
             return Ok(response);
         }
     }
+/*
+{
+usalo para probar las funciones de Add y Edit:
+    "idEtiqueta": 2,
+    "idFoto": 3,
+    "nombre": "Bombilla rota",
+    "descripcion": "La bombilla esta totalmente rota",
+    "fotoRequest": {
+        "idFoto": 4,
+        "nombre": "Bombilla rota",
+        "url": "Bombilla_rota.png"
+    }
+}
+*/
 }
