@@ -15,5 +15,8 @@ namespace gb_shop_api.Models.Request
         public string Descripcion { get; set; }
         public int? PersonasRequeridas { get; set; }
         public int? Asistencias { get; set; }
+        public FotoRequest FotoRequest { get; set; }
+        public PatrocinadorRequest PatrocinadorRequest { get; set; }
+        public GeoubicacionRequest GeoubicacionRequest { get; set; }
     }
 }
