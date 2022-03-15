@@ -270,6 +270,7 @@ namespace gb_shop_api.Models.Repositories
 
                     foto.Delete(idfoto);
                     geoubicacion.Delete(idgeoubicacion);
+                    poi.DeleteByReporte(id);
                     oRespuesta.Exito = 1;
                 }
             }

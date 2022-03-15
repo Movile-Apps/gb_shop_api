@@ -80,6 +80,24 @@ namespace gb_shop_api.Models.Repositories
             }
             return oRespuesta;
         }
+        public Respuesta<Poi> GetByReporte(int id)
+        {
+            Respuesta<Poi> oRespuesta = new Respuesta<Poi>();
+            try
+            {
+                using (gb_shopContext db = new gb_shopContext())
+                {
+                    var list = db.Pois.FirstOrDefault(x => x.IdReporte == id);
+                    oRespuesta.Exito = 1;
+                    oRespuesta.Data = list;
+                }
+            }
+            catch (Exception ex)
+            {
+                oRespuesta.Mensaje = ex.Message;
+            }
+            return oRespuesta;
+        }
         public Respuesta<object> Add(PoiRequest model)
         {
             Respuesta<object> oRespuesta = new Respuesta<object>();
@@ -135,6 +153,26 @@ namespace gb_shop_api.Models.Repositories
                 using (gb_shopContext db = new gb_shopContext())
                 {
                     Poi oPro = db.Pois.Find(id);
+                    db.Remove(oPro);
+                    db.SaveChanges();
+                    oRespuesta.Exito = 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                oRespuesta.Mensaje = ex.Message;
+            }
+            return oRespuesta;
+        }
+        public Respuesta<object> DeleteByReporte(int id)
+        {
+            Respuesta<object> oRespuesta = new Respuesta<object>();
+
+            try
+            {
+                using (gb_shopContext db = new gb_shopContext())
+                {
+                    Poi oPro = GetByReporte(id).Data;
                     db.Remove(oPro);
                     db.SaveChanges();
                     oRespuesta.Exito = 1;
