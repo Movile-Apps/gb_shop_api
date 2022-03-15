@@ -15,6 +15,8 @@ namespace gb_shop_api.Models.Repositories
         FotoRepository foto = new FotoRepository();
         GeoubicacionRepository geoubicacion = new GeoubicacionRepository();
         PoiRepository poi = new PoiRepository();
+        UsuarioRepository usuario = new UsuarioRepository();
+        EtiquetaRepository etiqueta = new EtiquetaRepository();
 
         public Respuesta<List<ReporteRequest>> Get()
         {
@@ -23,7 +25,7 @@ namespace gb_shop_api.Models.Repositories
             {
                 using (gb_shopContext db = new gb_shopContext())
                 {
-                    var list = db.Reportes.Join(db.Usuarios, Reporte => Reporte.IdUsuario, Usuario => Usuario.IdUsuario, (Reporte, Usuario) => new ReporteRequest
+                    var list = db.Reportes.Join(db.Geoubicacions, Reporte => Reporte.IdGeoubicacion, Geoubicacion => Geoubicacion.IdGeoubicacion, (Reporte, Geoubicacion) => new ReporteRequest
                     {
                         IdReporte = Reporte.IdReporte,
                         IdEtiqueta = Reporte.IdEtiqueta,
@@ -32,41 +34,8 @@ namespace gb_shop_api.Models.Repositories
                         IdGeoubicacion = Reporte.IdGeoubicacion,
                         Descripcion = Reporte.Descripcion,
                         Fecha = Reporte.Fecha,
-                        UsuarioRequest = new UsuarioRequest {
-                            IdUsuario = Usuario.IdUsuario,
-                            IdFoto = Usuario.IdFoto,
-                            Nombre = Usuario.Nombre,
-                            Apellido = Usuario.Apellido,
-                            Correo = Usuario.Correo,
-                            Contraseña = Usuario.Contraseña
-                        }
-                    }).Join(db.Etiqueta, Reporte => Reporte.IdEtiqueta, Etiqueta => Etiqueta.IdEtiqueta, (Reporte, Etiqueta) => new ReporteRequest
-                    {
-                        IdReporte = Reporte.IdReporte,
-                        IdEtiqueta = Reporte.IdEtiqueta,
-                        IdUsuario = Reporte.IdUsuario,
-                        IdFoto = Reporte.IdFoto,
-                        IdGeoubicacion = Reporte.IdGeoubicacion,
-                        Descripcion = Reporte.Descripcion,
-                        Fecha = Reporte.Fecha,
-                        UsuarioRequest = Reporte.UsuarioRequest,
-                        EtiquetaRequest = new EtiquetaRequest{
-                            IdEtiqueta = Etiqueta.IdEtiqueta,
-                            IdFoto = Etiqueta.IdFoto,
-                            Nombre = Etiqueta.Nombre,
-                            Descripcion = Etiqueta.Descripcion
-                        }
-                    }).Join(db.Geoubicacions, Reporte => Reporte.IdGeoubicacion, Geoubicacion => Geoubicacion.IdGeoubicacion, (Reporte, Geoubicacion) => new ReporteRequest
-                    {
-                        IdReporte = Reporte.IdReporte,
-                        IdEtiqueta = Reporte.IdEtiqueta,
-                        IdUsuario = Reporte.IdUsuario,
-                        IdFoto = Reporte.IdFoto,
-                        IdGeoubicacion = Reporte.IdGeoubicacion,
-                        Descripcion = Reporte.Descripcion,
-                        Fecha = Reporte.Fecha,
-                        UsuarioRequest = Reporte.UsuarioRequest,
-                        EtiquetaRequest = Reporte.EtiquetaRequest,
+                        UsuarioRequest = usuario.GetById(Convert.ToInt32(Reporte.IdUsuario)).Data,
+                        EtiquetaRequest = etiqueta.GetById(Convert.ToInt32(Reporte.IdEtiqueta)).Data,
                         GeoubicacionRequest = new GeoubicacionRequest
                         {
                             IdGeoubicacion = Geoubicacion.IdGeoubicacion,
@@ -109,7 +78,7 @@ namespace gb_shop_api.Models.Repositories
             {
                 using (gb_shopContext db = new gb_shopContext())
                 {
-                    var list = db.Reportes.Join(db.Usuarios, Reporte => Reporte.IdUsuario, Usuario => Usuario.IdUsuario, (Reporte, Usuario) => new ReporteRequest
+                    var list = db.Reportes.Join(db.Geoubicacions, Reporte => Reporte.IdGeoubicacion, Geoubicacion => Geoubicacion.IdGeoubicacion, (Reporte, Geoubicacion) => new ReporteRequest
                     {
                         IdReporte = Reporte.IdReporte,
                         IdEtiqueta = Reporte.IdEtiqueta,
@@ -118,43 +87,8 @@ namespace gb_shop_api.Models.Repositories
                         IdGeoubicacion = Reporte.IdGeoubicacion,
                         Descripcion = Reporte.Descripcion,
                         Fecha = Reporte.Fecha,
-                        UsuarioRequest = new UsuarioRequest
-                        {
-                            IdUsuario = Usuario.IdUsuario,
-                            IdFoto = Usuario.IdFoto,
-                            Nombre = Usuario.Nombre,
-                            Apellido = Usuario.Apellido,
-                            Correo = Usuario.Correo,
-                            Contraseña = Usuario.Contraseña
-                        }
-                    }).Join(db.Etiqueta, Reporte => Reporte.IdEtiqueta, Etiqueta => Etiqueta.IdEtiqueta, (Reporte, Etiqueta) => new ReporteRequest
-                    {
-                        IdReporte = Reporte.IdReporte,
-                        IdEtiqueta = Reporte.IdEtiqueta,
-                        IdUsuario = Reporte.IdUsuario,
-                        IdFoto = Reporte.IdFoto,
-                        IdGeoubicacion = Reporte.IdGeoubicacion,
-                        Descripcion = Reporte.Descripcion,
-                        Fecha = Reporte.Fecha,
-                        UsuarioRequest = Reporte.UsuarioRequest,
-                        EtiquetaRequest = new EtiquetaRequest
-                        {
-                            IdEtiqueta = Etiqueta.IdEtiqueta,
-                            IdFoto = Etiqueta.IdFoto,
-                            Nombre = Etiqueta.Nombre,
-                            Descripcion = Etiqueta.Descripcion
-                        }
-                    }).Join(db.Geoubicacions, Reporte => Reporte.IdGeoubicacion, Geoubicacion => Geoubicacion.IdGeoubicacion, (Reporte, Geoubicacion) => new ReporteRequest
-                    {
-                        IdReporte = Reporte.IdReporte,
-                        IdEtiqueta = Reporte.IdEtiqueta,
-                        IdUsuario = Reporte.IdUsuario,
-                        IdFoto = Reporte.IdFoto,
-                        IdGeoubicacion = Reporte.IdGeoubicacion,
-                        Descripcion = Reporte.Descripcion,
-                        Fecha = Reporte.Fecha,
-                        UsuarioRequest = Reporte.UsuarioRequest,
-                        EtiquetaRequest = Reporte.EtiquetaRequest,
+                        UsuarioRequest = usuario.GetById(Convert.ToInt32(Reporte.IdUsuario)).Data,
+                        EtiquetaRequest = etiqueta.GetById(Convert.ToInt32(Reporte.IdEtiqueta)).Data,
                         GeoubicacionRequest = new GeoubicacionRequest
                         {
                             IdGeoubicacion = Geoubicacion.IdGeoubicacion,

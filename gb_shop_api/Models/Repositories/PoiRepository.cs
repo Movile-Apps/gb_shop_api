@@ -12,6 +12,8 @@ namespace gb_shop_api.Models.Repositories
 {
     public class PoiRepository
     {
+        ReporteRepository reporte = new ReporteRepository();
+
         public Respuesta<List<PoiRequest>> Get()
         {
             Respuesta<List<PoiRequest>> oRespuesta = new Respuesta<List<PoiRequest>>();
@@ -25,16 +27,7 @@ namespace gb_shop_api.Models.Repositories
                         IdReporte = Poi.IdReporte,
                         Confirmaciones = Poi.Confirmaciones,
                         Negaciones = Poi.Negaciones,
-                        ReporteRequest = new ReporteRequest
-                        {
-                            IdReporte = Reporte.IdReporte,
-                            IdUsuario = Reporte.IdUsuario,
-                            IdEtiqueta = Reporte.IdEtiqueta,
-                            IdFoto = Reporte.IdFoto,
-                            IdGeoubicacion = Reporte.IdGeoubicacion,
-                            Fecha = Reporte.Fecha,
-                            Descripcion = Reporte.Descripcion,
-                        }
+                        ReporteRequest = reporte.GetById(Convert.ToInt32(Poi.IdReporte)).Data
                     }).ToList();
                     oRespuesta.Exito = 1;
                     oRespuesta.Data = list;
@@ -59,16 +52,7 @@ namespace gb_shop_api.Models.Repositories
                         IdReporte = Poi.IdReporte,
                         Confirmaciones = Poi.Confirmaciones,
                         Negaciones = Poi.Negaciones,
-                        ReporteRequest = new ReporteRequest
-                        {
-                            IdReporte = Reporte.IdReporte,
-                            IdUsuario = Reporte.IdUsuario,
-                            IdEtiqueta = Reporte.IdEtiqueta,
-                            IdFoto = Reporte.IdFoto,
-                            IdGeoubicacion = Reporte.IdGeoubicacion,
-                            Fecha = Reporte.Fecha,
-                            Descripcion = Reporte.Descripcion,
-                        }
+                        ReporteRequest = reporte.GetById(Convert.ToInt32(Poi.IdReporte)).Data
                     }).FirstOrDefault(x => x.IdPoi == id);
                     oRespuesta.Exito = 1;
                     oRespuesta.Data = list;

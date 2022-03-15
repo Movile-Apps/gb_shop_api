@@ -14,6 +14,7 @@ namespace gb_shop_api.Models.Repositories
     {
         FotoRepository foto = new FotoRepository();
         GeoubicacionRepository geoubicacion = new GeoubicacionRepository();
+        PatrocinadorRepository patrocinador = new PatrocinadorRepository();
 
         public Respuesta<List<EventoLimpiezaRequest>> Get()
         {
@@ -37,31 +38,8 @@ namespace gb_shop_api.Models.Repositories
                             IdFoto = Foto.IdFoto,
                             Nombre = Foto.Nombre,
                             Url = Foto.Url,
-                        }
-                    }).Join(db.Patrocinadors, Evento => Evento.IdPatrocinador, Patrocinador => Patrocinador.IdPadrocinador, (Evento, Patrocinador) => new EventoLimpiezaRequest
-                    {
-                        IdEvento = Evento.IdEvento,
-                        IdPatrocinador = Evento.IdPatrocinador,
-                        IdFoto = Evento.IdFoto,
-                        IdGeoubicacion = Evento.IdGeoubicacion,
-                        Fecha = Evento.Fecha,
-                        Descripcion = Evento.Descripcion,
-                        PersonasRequeridas = Evento.PersonasRequeridas,
-                        Asistencias = Evento.Asistencias,
-                        FotoRequest = new FotoRequest
-                        {
-                            IdFoto = Evento.FotoRequest.IdFoto,
-                            Nombre = Evento.FotoRequest.Nombre,
-                            Url = Evento.FotoRequest.Url,
                         },
-                        PatrocinadorRequest = new PatrocinadorRequest
-                        {
-                            IdPadrocinador = Patrocinador.IdPadrocinador,
-                            IdFoto = Patrocinador.IdFoto,
-                            Nombre = Patrocinador.Nombre,
-                            Email = Patrocinador.Email,
-                            Telefono = Patrocinador.Telefono,
-                        }
+                        PatrocinadorRequest = patrocinador.GetById(Convert.ToInt32(Evento.IdPatrocinador)).Data
                     }).Join(db.Geoubicacions, Evento => Evento.IdGeoubicacion, Geoubicacion => Geoubicacion.IdGeoubicacion, (Evento, Geoubicacion) => new EventoLimpiezaRequest
                     {
                         IdEvento = Evento.IdEvento,
@@ -72,20 +50,8 @@ namespace gb_shop_api.Models.Repositories
                         Descripcion = Evento.Descripcion,
                         PersonasRequeridas = Evento.PersonasRequeridas,
                         Asistencias = Evento.Asistencias,
-                        FotoRequest = new FotoRequest
-                        {
-                            IdFoto = Evento.FotoRequest.IdFoto,
-                            Nombre = Evento.FotoRequest.Nombre,
-                            Url = Evento.FotoRequest.Url,
-                        },
-                        PatrocinadorRequest = new PatrocinadorRequest
-                        {
-                            IdPadrocinador = Evento.PatrocinadorRequest.IdPadrocinador,
-                            IdFoto = Evento.PatrocinadorRequest.IdFoto,
-                            Nombre = Evento.PatrocinadorRequest.Nombre,
-                            Email = Evento.PatrocinadorRequest.Email,
-                            Telefono = Evento.PatrocinadorRequest.Telefono,
-                        },
+                        FotoRequest = Evento.FotoRequest,
+                        PatrocinadorRequest = Evento.PatrocinadorRequest,
                         GeoubicacionRequest = new GeoubicacionRequest
                         {
                             IdGeoubicacion = Geoubicacion.IdGeoubicacion,
@@ -125,31 +91,8 @@ namespace gb_shop_api.Models.Repositories
                             IdFoto = Foto.IdFoto,
                             Nombre = Foto.Nombre,
                             Url = Foto.Url,
-                        }
-                    }).Join(db.Patrocinadors, Evento => Evento.IdPatrocinador, Patrocinador => Patrocinador.IdPadrocinador, (Evento, Patrocinador) => new EventoLimpiezaRequest
-                    {
-                        IdEvento = Evento.IdEvento,
-                        IdPatrocinador = Evento.IdPatrocinador,
-                        IdFoto = Evento.IdFoto,
-                        IdGeoubicacion = Evento.IdGeoubicacion,
-                        Fecha = Evento.Fecha,
-                        Descripcion = Evento.Descripcion,
-                        PersonasRequeridas = Evento.PersonasRequeridas,
-                        Asistencias = Evento.Asistencias,
-                        FotoRequest = new FotoRequest
-                        {
-                            IdFoto = Evento.FotoRequest.IdFoto,
-                            Nombre = Evento.FotoRequest.Nombre,
-                            Url = Evento.FotoRequest.Url,
                         },
-                        PatrocinadorRequest = new PatrocinadorRequest
-                        {
-                            IdPadrocinador = Patrocinador.IdPadrocinador,
-                            IdFoto = Patrocinador.IdFoto,
-                            Nombre = Patrocinador.Nombre,
-                            Email = Patrocinador.Email,
-                            Telefono = Patrocinador.Telefono,
-                        }
+                        PatrocinadorRequest = patrocinador.GetById(Convert.ToInt32(Evento.IdPatrocinador)).Data
                     }).Join(db.Geoubicacions, Evento => Evento.IdGeoubicacion, Geoubicacion => Geoubicacion.IdGeoubicacion, (Evento, Geoubicacion) => new EventoLimpiezaRequest
                     {
                         IdEvento = Evento.IdEvento,
@@ -160,20 +103,8 @@ namespace gb_shop_api.Models.Repositories
                         Descripcion = Evento.Descripcion,
                         PersonasRequeridas = Evento.PersonasRequeridas,
                         Asistencias = Evento.Asistencias,
-                        FotoRequest = new FotoRequest
-                        {
-                            IdFoto = Evento.FotoRequest.IdFoto,
-                            Nombre = Evento.FotoRequest.Nombre,
-                            Url = Evento.FotoRequest.Url,
-                        },
-                        PatrocinadorRequest = new PatrocinadorRequest
-                        {
-                            IdPadrocinador = Evento.PatrocinadorRequest.IdPadrocinador,
-                            IdFoto = Evento.PatrocinadorRequest.IdFoto,
-                            Nombre = Evento.PatrocinadorRequest.Nombre,
-                            Email = Evento.PatrocinadorRequest.Email,
-                            Telefono = Evento.PatrocinadorRequest.Telefono,
-                        },
+                        FotoRequest = Evento.FotoRequest,
+                        PatrocinadorRequest = Evento.PatrocinadorRequest,
                         GeoubicacionRequest = new GeoubicacionRequest
                         {
                             IdGeoubicacion = Geoubicacion.IdGeoubicacion,
